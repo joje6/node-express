@@ -29,6 +29,8 @@ app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log('req.ip', req.ip);
+  console.log('headers', req.headers);
   next(createError(404));
 });
 
