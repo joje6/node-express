@@ -4,6 +4,8 @@ const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
+  console.log('main');
+
   bcrypt.genSalt(10, function (err, salt) {
     if (err) return next(err);
 
@@ -11,7 +13,8 @@ router.get('/', (req, res, next) => {
       if (err) return next(err);
 
       // Store hash in your password DB.
-      res.render('index.html', hash);
+      console.log('hash', hash);
+      res.render('index.html');
     });
   });
 
