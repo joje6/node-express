@@ -7,4 +7,8 @@ router.get('/', (req, res, next) => {
   res.send({ data: 'hello world' });
 });
 
+router.get('/test', (req, res, next) => {
+  res.send({ data: 'test' });
+});
+
 module.exports = router;
