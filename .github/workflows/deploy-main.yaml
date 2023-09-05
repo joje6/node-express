@@ -18,17 +18,15 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: joje/gksl-2
+          project: joje/sel-5
           stage: main
           yaml: |
-            name: node-express2
+            name: node-express
             app: node@16
             options:
               env:
                 - name: NODE_ENV
                   value: production
-                - name: DB_URL
-                  secret: mariadb-root-password
               ports: 3000
             context:
               git:
