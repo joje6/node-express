@@ -6,6 +6,12 @@ const cookieParser = require('cookie-parser');
 const indexRouter = require('./routes/index');
 // var usersRouter = require('./routes/users');
 
+var cron = require('node-cron');
+
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minute');
+});
+
 const app = express();
 
 // view engine setup
