@@ -8,6 +8,8 @@ const indexRouter = require('./routes/index');
 
 var cron = require('node-cron');
 
+console.log(process.env);
+
 cron.schedule('* * * * *', () => {
   console.log('running a task every minute');
 });
