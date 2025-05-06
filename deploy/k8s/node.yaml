@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: node
-          image: node-express
+          image: ghcr.io/joje6/joje.attrs-node-express-node-express
           ports:
             - containerPort: 3000
               protocol: TCP
