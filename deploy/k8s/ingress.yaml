@@ -1,0 +1,31 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ingress-httpbin
+  namespace: test
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: node-express.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-httpbin
+                port:
+                  number: 80
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-test
+  namespace: test
+spec:
+  dnsNames:
+    - "*.test.dev"
+  issuerRef:
+    kind: ClusterIssuer
+    name: test-issuer
+  secretName: test-tls

@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: database
+    module: mongodb
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+      module: mongodb
+  serviceName: mongodb
+  template:
+    metadata:
+      labels:
+        app: database
+        module: mongodb
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: purpose
+                    operator: In
+                    values:
+                      - system
+              weight: 1
+      containers:
+        - image: mongo:6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            tcpSocket:
+              port: 27017
+          name: mongo
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 2Gi
+            requests:
+              cpu: 20m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+          startupProbe:
+            initialDelaySeconds: 5
+            tcpSocket:
+              port: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: data
+              subPath: data
+      terminationGracePeriodSeconds: 10
+      tolerations:
+        - effect: NoExecute
+          operator: Exists
+        - effect: NoSchedule
+          operator: Exists
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: database
+    module: mongodb
+  name: mongodb
+spec:
+  clusterIP: None
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+    app: database
+    module: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-mongodb
+spec:
+  type: LoadBalancer
+  ports:
+    - name: mongodb
+      port: 27017
+  selector:
+    app: database
+    module: mongodb
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mongo-secret
+data:
+  key: dmFsdWUK
