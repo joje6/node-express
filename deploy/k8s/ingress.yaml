@@ -1,7 +1,7 @@
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: ingress-httpbin
+  name: ingress-node-express
   namespace: test
 spec:
   ingressClassName: nginx
